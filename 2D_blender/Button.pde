@@ -24,7 +24,7 @@ class Button {
     // 繪製按鈕外框
     rectMode(CENTER);
     rect(x, y, width, height);
-    rectMode(RADIUS);
+      rectMode(RADIUS);
     
     // 繪製按鈕文字
     textAlign(CENTER, CENTER);

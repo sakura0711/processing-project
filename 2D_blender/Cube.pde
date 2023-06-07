@@ -21,7 +21,7 @@ class Cube {
       overBox = true;
       if (!locked) {
         stroke(255);
-        fill(fillColor);
+        fill(255,0,0);
       }
     } else {
       stroke(153);
@@ -40,7 +40,7 @@ class Cube {
   
   void lock() {
     locked = true;
-    fill(255);
+    fill(255,0,0);
     xOffset = mouseX - x;
     yOffset = mouseY - y;
   }
@@ -54,6 +54,7 @@ class Cube {
   }
   
   void drag(float mouseX, float mouseY) {
+    fill(0);
     x = mouseX - xOffset;
     y = mouseY - yOffset;
   }
