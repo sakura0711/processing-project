@@ -30,7 +30,7 @@ class Cube {
       overBox = false;
     }
     
-    // 繪製方塊
+    // Drawing cube
     rect(x, y, size, size);
   }
   
@@ -63,4 +63,6 @@ class Cube {
   void setFillcolor(color _fillcolor){
     this.fillColor = _fillcolor;
   }
+  
+  
 }

@@ -9,8 +9,8 @@ Circle circle;
 int nowCubeIndex = 0;
 
 void setup() {
-    //fullScreen();
-    size(1000, 800);
+    fullScreen();
+    //size(1000, 800);
 
     // Create Button
     createButton = new Button(width/2, height-50, 100, 40, "Create Cube");
@@ -113,6 +113,16 @@ void mouseReleased() {
 
 // Create cubes
 void createCube(float size, color fillColor, float posX, float posY) {
-  Cube cube = new Cube(size, fillColor, posX, posY);
-  cubes.add(cube);
+    Cube cube = new Cube(size, fillColor, posX, posY);
+    cubes.add(cube);
+}
+
+void keyPressed() {
+    if(cubes.size() != 0 && nowCubeIndex != -1){
+        if (key == '+' || key == '=') {
+            cubes.get(nowCubeIndex).size += 10; 
+        } else if (key == '-' || key == '_') {
+            cubes.get(nowCubeIndex).size = max(10, cubes.get(nowCubeIndex).size - 10);
+        }
+    }
 }
