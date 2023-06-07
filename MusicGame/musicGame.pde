@@ -6,7 +6,7 @@ void setup(){
     smooth(4);
     
     // # PeasyCam Setting
-    cam = new PeasyCam(this, width/2, 200, 0, 1000);
+    cam = new PeasyCam(this, width/2, 200, 0, 800);
     cam.rotateX(-150);
     //cam.setPitchRotationMode();
     //false to make this camera stop responding to mouse
@@ -20,6 +20,9 @@ void setup(){
 
 int score = 0;
 int combo = 0;
+int sizeX_MIN = 10,
+    sizeX_MAX = 150,
+    sizeX = sizeX_MIN;
 
 boolean pushbtn = false;
 String judgeString = ""; 
@@ -35,27 +38,22 @@ void draw(){
     background(150);
 
     strokeWeight(5);
-    //stroke(255,0,0);
-    //line(0,0,0,200,0,0); // x
-    //stroke(0,255,0);
-    //line(0,0,0,0,1000,0); // y
-    //stroke(0,0,255);
-    //line(0,0,0,0,0,-200); // z
+    stroke(255,0,0);
+    line(0,0,0,200,0,0); // x
+    stroke(0,255,0);
+    line(0,0,0,0,1000,0); // y
+    stroke(0,0,255);
+    line(0,0,0,0,0,-200); // z
     
+    strokeWeight(10);
     stroke(138, 242, 187);
     line(-100,460,0,1000,460,0); // jugde Line
-
-
-    /* jugde Line Drawing ================ */
-    //cam.beginHUD();
-    //    stroke(128, 219, 255);
-    //    strokeWeight(5);
-    //    line(0, height/2 + 150, 0, width, height/2 + 150, 0);
-    //    stroke(255);
-    //    strokeWeight(2);
-    //cam.endHUD();
-    /* =================================== */
     
+    strokeWeight(3);
+    line(width/2-80,460,0,width/2-30,460,-1500); // support Line
+    line(width/2+80,460,0,width/2+30,460,-1500);
+
+
     
     if(StepCount < StepMax){
         StepCount += 10;
@@ -64,7 +62,7 @@ void draw(){
         fill(222, 255, 209);
         stroke(0);
         strokeWeight(2);
-        box(150,10,100);
+        box(max(40,150 - abs(StepCount/10)),5,100);
         popMatrix();
         //print(StepCount + "\n");
     }
