@@ -25,7 +25,10 @@ int sizeX_MIN = 10,
     sizeX_MAX = 150,
     sizeX = sizeX_MIN;
 
-boolean ClickmidlleTRACK = false;
+boolean ClickmidlleTRACK = false, 
+        ClickleftTRACK   = false, 
+        ClickrightTRACK  = false;
+        
 String judgeString = ""; 
 color judgeColor = color(255,255,255);
 
@@ -104,7 +107,7 @@ void draw(){
             stroke(0);
             strokeWeight(2);
             box(70,5,30);
-            popMatrix(); 
+            popMatrix();
         }
         else{ StepCount = StepMin;}
 
@@ -114,8 +117,88 @@ void draw(){
          * miss -> bad -> good -> perfect -> good -> bad -> miss
          *   1      3       3        6         3      3       1   (*10) 
          */ int judgeNUM = 0;
-         
-        if(((StepMax-200) <= StepCount && StepCount <= StepMax) && ClickmidlleTRACK == true){
+        
+        
+        if(((StepMax-200) <= StepCount && StepCount <= StepMax) && (ClickleftTRACK == true && trackSelector == 0)){
+            judgeNUM =  StepMax - StepCount;
+            if(judgeNUM <= 20){
+                // miss no score magnification(0)
+                score += 2 * 0;
+                combo = 0;
+                health -= 100;
+                
+                judgeColor = color(186, 186, 186);
+                judgeString = "miss";
+            }
+            else if(judgeNUM <= 40){
+                // bad score magnification(1)
+                score += 2 * 1;
+                combo = 0;
+                health -= 50;
+                
+                judgeColor = color(109, 113, 207);
+                judgeString = "bad";
+            }
+            else if(judgeNUM <= 70){
+                // good score magnification(2)
+                score += 2 * 2;
+                combo += 1;
+                judgeColor = color(255, 171, 82);
+                judgeString = "good";
+            }
+            else if(judgeNUM <= 130){
+                // per score magnification(4)
+                score += 8 * 4;
+                combo += 1;
+                judgeColor = color(255, 145, 231);
+                judgeString = "perfect";
+            }
+            else if(judgeNUM <= 150){
+                // good score magnification(2)
+                score += 2 * 2;
+                combo += 1;
+                judgeColor = color(255, 171, 82);
+                judgeString = "good";
+            }
+            else if(judgeNUM <= 170){
+                // bad score magnification(1)
+                score += 2 * 1;
+                combo = 0;
+                health -= 50;
+                
+                judgeColor = color(109, 113, 207);
+                judgeString = "bad";
+            }
+            else if(judgeNUM <= 200){
+                // miss no score magnification(0)
+                score += 2 * 0;
+                combo = 0;
+                 health -= 100;
+                
+                judgeColor = color(186, 186, 186);
+                judgeString = "miss";
+            }
+            ClickleftTRACK = false;
+            StepCount = StepMin;
+            trackSelector = int(random(3)); //0 ~ 2
+        }
+        else if(StepCount + 2 > StepMax){
+            combo = 0;
+            health -= 100;
+            
+            ClickleftTRACK = false;
+            StepCount = StepMin;
+            judgeColor = color(186, 186, 186);
+            judgeString = "miss";
+            trackSelector = int(random(3)); //0 ~ 2
+        }
+        else{
+            ClickleftTRACK = false;
+            //trackSelector = int(random(3)); // 0~2
+        }
+        
+        
+        if(((StepMax-200) <= StepCount && StepCount <= StepMax) && (ClickmidlleTRACK == true && trackSelector == 1)){
             judgeNUM =  StepMax - StepCount;
             if(judgeNUM <= 20){
                 // miss no score magnification(0)
@@ -192,6 +275,85 @@ void draw(){
             ClickmidlleTRACK = false;
             //trackSelector = int(random(3)); // 0~2
         }
+        
+        
+        if(((StepMax-200) <= StepCount && StepCount <= StepMax) && (ClickrightTRACK == true && trackSelector == 2)){
+            judgeNUM =  StepMax - StepCount;
+            if(judgeNUM <= 20){
+                // miss no score magnification(0)
+                score += 2 * 0;
+                combo = 0;
+                health -= 100;
+                
+                judgeColor = color(186, 186, 186);
+                judgeString = "miss";
+            }
+            else if(judgeNUM <= 40){
+                // bad score magnification(1)
+                score += 2 * 1;
+                combo = 0;
+                health -= 50;
+                
+                judgeColor = color(109, 113, 207);
+                judgeString = "bad";
+            }
+            else if(judgeNUM <= 70){
+                // good score magnification(2)
+                score += 2 * 2;
+                combo += 1;
+                judgeColor = color(255, 171, 82);
+                judgeString = "good";
+            }
+            else if(judgeNUM <= 130){
+                // per score magnification(4)
+                score += 8 * 4;
+                combo += 1;
+                judgeColor = color(255, 145, 231);
+                judgeString = "perfect";
+            }
+            else if(judgeNUM <= 150){
+                // good score magnification(2)
+                score += 2 * 2;
+                combo += 1;
+                judgeColor = color(255, 171, 82);
+                judgeString = "good";
+            }
+            else if(judgeNUM <= 170){
+                // bad score magnification(1)
+                score += 2 * 1;
+                combo = 0;
+                health -= 50;
+                
+                judgeColor = color(109, 113, 207);
+                judgeString = "bad";
+            }
+            else if(judgeNUM <= 200){
+                // miss no score magnification(0)
+                score += 2 * 0;
+                combo = 0;
+                 health -= 100;
+                
+                judgeColor = color(186, 186, 186);
+                judgeString = "miss";
+            }
+            ClickrightTRACK = false;
+            StepCount = StepMin;
+            trackSelector = int(random(3)); //0 ~ 2
+        }
+        else if(StepCount + 2 > StepMax){
+            combo = 0;
+            health -= 100;
+            
+            ClickrightTRACK = false;
+            StepCount = StepMin;
+            judgeColor = color(186, 186, 186);
+            judgeString = "miss";
+            trackSelector = int(random(3)); //0 ~ 2
+        }
+        else{
+            ClickrightTRACK = false;
+            //trackSelector = int(random(3)); // 0~2
+        }
     }
     else
     {
@@ -206,9 +368,16 @@ void draw(){
 }
 
 void keyPressed(){
+    if(key == 'g' || key == 'G'){
+        ClickleftTRACK = true;
+    }
     if(key == 'h' || key == 'H'){
         ClickmidlleTRACK = true;
     }
+    if(key == 'j' || key == 'J'){
+        ClickrightTRACK = true;
+    }
+    
     if(key == 'r' || key == 'R'){
        if(!GameState)
        {    
