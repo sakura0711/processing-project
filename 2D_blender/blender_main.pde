@@ -8,9 +8,15 @@ Circle circle;
 //recode cude index
 int nowCubeIndex = 0;
 
+// 
+boolean isScaleEditor = false;
+float OLDmouseX , OLDmouseY, 
+      scaleValue, S_standardDistance, 
+      tempCubeSize;
+
 void setup() {
-    fullScreen();
-    //size(1000, 800);
+    //fullScreen();
+    size(1000, 1000);
 
     // Create Button
     createButton = new Button(width/2, height-50, 100, 40, "Create Cube");
@@ -44,6 +50,35 @@ void draw() {
         cubes.get(i).display();
     }
 
+    if(isScaleEditor){
+        strokeWeight(5);
+        stroke(0,255,0);
+        line(mouseX,mouseY,cubes.get(nowCubeIndex).x,cubes.get(nowCubeIndex).y);
+        if(cubes.get(nowCubeIndex).size >= 10){
+            
+            // !! Scale Bug
+            scaleValue = dist(OLDmouseX,OLDmouseY,mouseX,mouseY) / 4; //<>//
+    
+            // # Debug area  ==============================================
+            print("<  ");
+            //print("scaleValue: " + scaleValue);
+            //print("  cubesSize: " + cubes.get(nowCubeIndex).size);
+            //print(mouseX,mouseY);
+            //print(cubes.get(nowCubeIndex).x);print(cubes.get(nowCubeIndex).y);
+            print("  >");
+            // # ==========================================================
+            
+            if(S_standardDistance <= dist(cubes.get(nowCubeIndex).x,cubes.get(nowCubeIndex).y,mouseX,mouseY)){
+                cubes.get(nowCubeIndex).size = tempCubeSize + (scaleValue);  //<>//
+            }
+            else if(S_standardDistance > dist(cubes.get(nowCubeIndex).x,cubes.get(nowCubeIndex).y,mouseX,mouseY)){
+                cubes.get(nowCubeIndex).size = max(10, tempCubeSize - (scaleValue));
+            }
+            
+        }
+        strokeWeight(0);
+    }
+    
     // Button display
     createButton.display();
     deleteButton.display();
@@ -58,7 +93,7 @@ void mousePressed() {
       if (cubes.get(i).isMouseOver()) {
           cubes.get(i).lock();
           nowCubeIndex = i; // get Selected cude index
-          print("\nnowCubeIndex : " + nowCubeIndex);
+          //print("\nnowCubeIndex : " + nowCubeIndex);
       }
    }
   
@@ -119,10 +154,30 @@ void createCube(float size, color fillColor, float posX, float posY) {
 
 void keyPressed() {
     if(cubes.size() != 0 && nowCubeIndex != -1){
+        // control cube size
         if (key == '+' || key == '=') {
             cubes.get(nowCubeIndex).size += 10; 
         } else if (key == '-' || key == '_') {
             cubes.get(nowCubeIndex).size = max(10, cubes.get(nowCubeIndex).size - 10);
+        }
+        // control cube size(hotkey)
+        if(key == 's' || key == 'S'){
+            OLDmouseX = mouseX;
+            OLDmouseY = mouseY;
+            tempCubeSize = cubes.get(nowCubeIndex).size;
+            S_standardDistance = dist(cubes.get(nowCubeIndex).x,cubes.get(nowCubeIndex).y,OLDmouseX,OLDmouseY);
+            isScaleEditor = true;
+        }
+        
+        // application all transfrom
+        if(key == ENTER){
+            isScaleEditor = false;
+        }
+        
+        // Cancel all transfrom
+        if(key == 'c'){
+            isScaleEditor = false;
+            cubes.get(nowCubeIndex).size = tempCubeSize;
         }
     }
 }
