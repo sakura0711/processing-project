@@ -1,21 +1,23 @@
 import peasy .*;
 PeasyCam cam;
+PImage backgroundImage;
 
 void setup(){
     size(900,1000,P3D);
     smooth(4);
-    
     // # PeasyCam Setting
     cam = new PeasyCam(this, width/2, 200, 0, 800);
-    cam.rotateX(-150);
-    //cam.setPitchRotationMode();
+    //cam.rotateX(-150);
+    cam.setPitchRotationMode();
     //false to make this camera stop responding to mouse
-    cam.setActive(false);
+    //cam.setActive(false);
   
     // Processing Camera Setting
     //camera(width/2, -100, 200, 
     //       width/2, 300,      -200,
     //       0.0    , 1.0     ,       0.0);
+    
+    backgroundImage = loadImage("background.png");  // 替換為您的背景圖片路徑和檔名
 }
 
 int score = 0;
@@ -24,7 +26,7 @@ int sizeX_MIN = 10,
     sizeX_MAX = 150,
     sizeX = sizeX_MIN;
 
-boolean pushbtn = false;
+boolean ClickmidlleTRACK = false;
 String judgeString = ""; 
 color judgeColor = color(255,255,255);
 
@@ -32,10 +34,11 @@ int StepMin = -1500;
 int StepCount = StepMin;
 int StepMax = 120;
 
+// left = 0 middle = 1 right = 2
+int trackSelector = 1,trackValue = 0;
+
 void draw(){
-    //float[] rotations = cam.getRotations();
-    //print(rotations);
-    background(150);
+    background(backgroundImage);
 
     strokeWeight(5);
     stroke(255,0,0);
@@ -47,27 +50,44 @@ void draw(){
     
     strokeWeight(10);
     stroke(138, 242, 187);
-    line(-100,460,0,1000,460,0); // jugde Line
+    line(-100,440,0,1000,440,0); // jugde Line
     
-    strokeWeight(3);
-    line(width/2-80,460,0,width/2-30,460,-1500); // support Line
-    line(width/2+80,460,0,width/2+30,460,-1500);
+    /* # Start Drawing Support line ================== */
+        // left to right
+        strokeWeight(3);
+        line(width/2 - 115,440,0, width/2 - 115,440,-1700);
+        line(width/2 -  40,440,0, width/2 -  40,440,-1700);
+        line(width/2 +  40,440,0, width/2 +  40,440,-1700);
+        line(width/2 + 115,440,0, width/2 + 115,440,-1700);
+        
+        line(width/2 - 115,440, -1700, width/2 + 115,440,-1700);
+    /* ============================================== */
 
-
+   
+    //if(trackSelector == 0){ trackValue = -150;} // left
+    //else if(trackSelector == 1) {trackValue = 0;} // midlle
+    //else if(trackSelector == 2) {trackValue = 150;} // right
+    
+    
     
     if(StepCount < StepMax){
         StepCount += 10;
-        pushMatrix();
-        translate(width/2,height/2 -100,StepCount);
+ 
+        pushMatrix(); 
+        if(trackSelector == 0){translate(width/2 - 70,height/2 -100,StepCount);}
+        if(trackSelector == 1){translate(width/2 +  0,height/2 -100,StepCount);}
+        if(trackSelector == 2){translate(width/2 + 70,height/2 -100,StepCount);}
         fill(222, 255, 209);
         stroke(0);
         strokeWeight(2);
-        box(max(40,150 - abs(StepCount/10)),5,100);
+        box(70,5,30);
         popMatrix();
-        //print(StepCount + "\n");
+        
+        
     }
     else{
         StepCount = StepMin;
+        
     }
     
     /* # Start Drawing PeasyCam 2D GUI ================== */
@@ -102,7 +122,7 @@ void draw(){
      */
     
     int judgeNUM = 0;
-    if(((StepMax-200) <= StepCount && StepCount <= StepMax) && pushbtn == true){
+    if(((StepMax-200) <= StepCount && StepCount <= StepMax) && ClickmidlleTRACK == true){
         judgeNUM =  StepMax - StepCount;
         if(judgeNUM <= 20){
             // miss no score magnification(0)
@@ -153,24 +173,27 @@ void draw(){
             judgeColor = color(186, 186, 186);
             judgeString = "miss";
         }
-        pushbtn = false;
+        ClickmidlleTRACK = false;
         StepCount = StepMin;
+        trackSelector = int(random(3)); //0 ~ 2
     }
     else if(StepCount + 2 > StepMax){
         combo = 0;
-        pushbtn = false;
+        ClickmidlleTRACK = false;
         StepCount = StepMin;
         judgeColor = color(186, 186, 186);
         judgeString = "miss";
+        trackSelector = int(random(3)); //0 ~ 2
     }
     else{
-        pushbtn = false;
+        ClickmidlleTRACK = false;
+        //trackSelector = int(random(3)); // 0~2
     }
     
 }
 
 void keyPressed(){
-    if(key == 'f' || key == 'F'){
-        pushbtn = true;
+    if(key == 'h' || key == 'H'){
+        ClickmidlleTRACK = true;
     }
 }
