@@ -3,125 +3,115 @@ ArrayList<Cube> cubes = new ArrayList<Cube>();
 
 // Button object
 Button createButton, deleteButton;
-
-// Origin object 
 Circle circle;
 
-// Record cudeIndex
+//recode cude index
 int nowCubeIndex = 0;
 
 void setup() {
     //fullScreen();
     size(1000, 800);
 
-    // 創建按鈕和圓形
+    // Create Button
     createButton = new Button(width/2, height-50, 100, 40, "Create Cube");
     deleteButton = new Button(width/3, height-50, 100, 40, "Delete Cube");
   
+    // Create origin
     circle = new Circle(width/2, height/2, 20);
-    
+  
+    // Draw methods
     rectMode(RADIUS);
 }
 
 void draw() {
+    background(100);
+  
+    // origin display
+    circle.display();
 
-  
-  background(100);
-  
-  // 繪製圓形
-  circle.display();
-  
-  // 繪製所有方塊
-  for (Cube cube : cubes) {
-    cube.display();
-  }
-  
-  
-  // 繪製按鈕
-  createButton.display();
-  deleteButton.display();
-  
-   
-  
+    // cubes display 
+    for(int i = 0; i < cubes.size(); i++){ // ArrayList use .get(i) / dont use [i]
+        // setColor (notSelected)
+        color otherColor = color(255); // #white
+        cubes.get(i).setFillcolor(otherColor);
+        
+        // setColor (Selected)
+        if (i == nowCubeIndex) {
+            color activeColor = color(255, 204, 0); // #yellow
+            cubes.get(i).setFillcolor(activeColor);  
+        }
+        // display All cubes
+        cubes.get(i).display();
+    }
+
+    // Button display
+    createButton.display();
+    deleteButton.display();
 }
 
-
-void mouseClicked(){
-  
-  //for (int i = cubes.size() - 1; i >= 0; i--) {
-  //    Cube cube = cubes.get(i);
-  //    if (cube.isMouseOver()) {
-    //      cubes.remove(i); // 從列表中刪除方塊
-  //    }
-  //  }
-}
-
+// mouse down
 void mousePressed() {
-  // 檢查滑鼠點擊是否在方塊上
-  if(!createButton.isMouseOver()) {
-  for (Cube cube : cubes) {
-    if (cube.isMouseOver()) {
-        cube.lock();
+
+   // Select cude (mouse on cubes)
+   for(int i = 0; i < cubes.size(); i++){
+      // ArrayList use .get(i) / dont use [i]
+      if (cubes.get(i).isMouseOver()) {
+          cubes.get(i).lock();
+          nowCubeIndex = i; // get Selected cude index
+          print("\nnowCubeIndex : " + nowCubeIndex);
       }
-    }
-  }
-  
- for(int i = 0; i < cubes.size(); i++){
-   // ArrayList use .get(i) / dont use [i]
-    if (cubes.get(i).isMouseOver()) {
-        cubes.get(i).lock();
-        nowCubeIndex = i;
-        print(nowCubeIndex);
-    }
-}
-  
-  // 檢查滑鼠點擊是否在圓形上
-  if (circle.isMouseOver()) {
-    circle.lock();
-    nowCubeIndex = -1;
-  }
-  
-  // 檢查滑鼠點擊是否在按鈕上
-  if (createButton.isMouseOver()) {
-    float cubeX = circle.x;
-    float cubeY = circle.y - circle.radius - 40; // 在圓形上方生成方塊
-    createCube(50, color(255/*random(255), random(255), random(255)*/), cubeX, cubeY);
-    nowCubeIndex = -1;
-  }
-  
-   if(cubes.size() != 0 && nowCubeIndex != -1){
-     if (deleteButton.isMouseOver()) {
-       cubes.remove(nowCubeIndex); // 從列表中刪除方塊
-       nowCubeIndex = -1;
-     }
    }
-}
-
-void mouseDragged() {
-  // 拖動被鎖定的方塊
-  for (Cube cube : cubes) {
-    if (cube.isLocked()) {
-      cube.drag(mouseX, mouseY);
+  
+    // Select origin (mouse on circle)
+    if (circle.isMouseOver()) {
+        circle.lock();
+        nowCubeIndex = -1; // reset cube index
     }
-  }
   
-   // 拖動被鎖定的圓形
-  if (circle.isLocked()) {
-    circle.drag(mouseX, mouseY);
-  }
+    // Select createCube_btn
+    if (createButton.isMouseOver()) {
+        float cubeX = circle.x;
+        float cubeY = circle.y - circle.radius - 40; // Cube spawn on origin
+        createCube(50, color(255/*random(255), random(255), random(255)*/), cubeX, cubeY);
+        nowCubeIndex = -1; // reset cube index
+    }
+  
+    // Select deleteCube_btn 
+    if(cubes.size() != 0 && nowCubeIndex != -1){
+        if (deleteButton.isMouseOver()) {
+            cubes.remove(nowCubeIndex); 
+            nowCubeIndex = -1; // reset cube index
+        }
+    }
 }
 
+// mouse down & moving
+void mouseDragged() {
+    // Select (isLocked = true cube), and move to mouse position
+    for (Cube cube : cubes) {
+        if (cube.isLocked()) {
+            cube.drag(mouseX, mouseY);
+        }
+    }
+  
+    // Select (isLocked = true circle), and move to mouse position
+    if (circle.isLocked()) {
+        circle.drag(mouseX, mouseY);
+    }
+}
+
+// mouse up
 void mouseReleased() {
-  // 解鎖所有方塊
-  for (Cube cube : cubes) {
-    cube.unlock();
-  }
-  
-   // 解鎖圓形
- circle.unlock();
+    // Switch to Can't move (isLocked = false)
+    for (Cube cube : cubes) {
+        cube.unlock();
+    }
+    
+    // Switch to Can't move (isLocked = false)
+    circle.unlock();
 }
 
-// 創建方塊的函數
+// Create cubes
 void createCube(float size, color fillColor, float posX, float posY) {
   Cube cube = new Cube(size, fillColor, posX, posY);
   cubes.add(cube);

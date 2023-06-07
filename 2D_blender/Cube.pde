@@ -1,4 +1,3 @@
-
 class Cube {
   float x;
   float y;
@@ -18,7 +17,7 @@ class Cube {
   }
   
   void display() {
-    // 檢查滑鼠是否在方塊上
+    // Checks if the mouse is on a block
     if (isMouseOver()) {
       overBox = true;
       if (!locked) {
@@ -59,5 +58,9 @@ class Cube {
     fill(0);
     x = mouseX - xOffset;
     y = mouseY - yOffset;
+  }
+  
+  void setFillcolor(color _fillcolor){
+    this.fillColor = _fillcolor;
   }
 }

@@ -14,19 +14,19 @@ class Button {
   }
   
   void display() {
-    // 檢查滑鼠是否在按鈕上
+    // Checks if the mouse is on a block
     if (isMouseOver()) {
       fill(200);
     } else {
       fill(255);
     }
     
-    // 繪製按鈕外框
+    // Draw methods
     rectMode(CENTER);
     rect(x, y, width, height);
       rectMode(RADIUS);
     
-    // 繪製按鈕文字
+    // Draw methods
     textAlign(CENTER, CENTER);
     fill(0);
     textSize(16);

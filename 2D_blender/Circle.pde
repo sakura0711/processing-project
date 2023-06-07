@@ -14,7 +14,7 @@ class Circle {
   }
   
   void display() {
-    // 檢查滑鼠是否在圓形上
+    // Checks if the mouse is on a circle
     if (isMouseOver()) {
       overCircle = true;
       if (!locked) {
@@ -25,13 +25,14 @@ class Circle {
       fill(79, 255, 232);
     }
     
-    // 繪製圓形
+    // Drawing circle
     ellipse(x, y, radius * 2, radius * 2);
     //triangle(100, 100, 70,  130,130,  130);
     fill(255,0,0);
   }
   
   boolean isMouseOver() {
+    //calculate two position lenght 
     return dist(mouseX, mouseY, x, y) < radius;
   }
   
