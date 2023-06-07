@@ -27,6 +27,8 @@ class Circle {
     
     // 繪製圓形
     ellipse(x, y, radius * 2, radius * 2);
+    //triangle(100, 100, 70,  130,130,  130);
+    fill(255,0,0);
   }
   
   boolean isMouseOver() {

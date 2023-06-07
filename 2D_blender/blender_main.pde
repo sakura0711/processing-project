@@ -1,19 +1,31 @@
+// Cubes data
 ArrayList<Cube> cubes = new ArrayList<Cube>();
-Button createButton;
+
+// Button object
+Button createButton, deleteButton;
+
+// Origin object 
 Circle circle;
 
+// Record cudeIndex
+int nowCubeIndex = 0;
+
 void setup() {
-  //size(640, 360);
-  fullScreen();
+    //fullScreen();
+    size(1000, 800);
+
+    // 創建按鈕和圓形
+    createButton = new Button(width/2, height-50, 100, 40, "Create Cube");
+    deleteButton = new Button(width/3, height-50, 100, 40, "Delete Cube");
   
-  // 創建按鈕和圓形
-  createButton = new Button(width/2, height-50, 100, 40, "Create Cube");
-  circle = new Circle(width/2, height/2, 20);
-  
-  rectMode(RADIUS);
+    circle = new Circle(width/2, height/2, 20);
+    
+    rectMode(RADIUS);
 }
 
 void draw() {
+
+  
   background(100);
   
   // 繪製圓形
@@ -24,30 +36,49 @@ void draw() {
     cube.display();
   }
   
+  
   // 繪製按鈕
   createButton.display();
+  deleteButton.display();
+  
+   
+  
 }
-void mouseClicked(){
 
-for (int i = cubes.size() - 1; i >= 0; i--) {
-    Cube cube = cubes.get(i);
-    if (cube.isMouseOver()) {
-      cubes.remove(i); // 從列表中刪除方塊
-    }
-  }
+
+void mouseClicked(){
+  
+  //for (int i = cubes.size() - 1; i >= 0; i--) {
+  //    Cube cube = cubes.get(i);
+  //    if (cube.isMouseOver()) {
+    //      cubes.remove(i); // 從列表中刪除方塊
+  //    }
+  //  }
 }
 
 void mousePressed() {
   // 檢查滑鼠點擊是否在方塊上
+  if(!createButton.isMouseOver()) {
   for (Cube cube : cubes) {
     if (cube.isMouseOver()) {
-      cube.lock();
+        cube.lock();
+      }
     }
   }
+  
+ for(int i = 0; i < cubes.size(); i++){
+   // ArrayList use .get(i) / dont use [i]
+    if (cubes.get(i).isMouseOver()) {
+        cubes.get(i).lock();
+        nowCubeIndex = i;
+        print(nowCubeIndex);
+    }
+}
   
   // 檢查滑鼠點擊是否在圓形上
   if (circle.isMouseOver()) {
     circle.lock();
+    nowCubeIndex = -1;
   }
   
   // 檢查滑鼠點擊是否在按鈕上
@@ -55,7 +86,15 @@ void mousePressed() {
     float cubeX = circle.x;
     float cubeY = circle.y - circle.radius - 40; // 在圓形上方生成方塊
     createCube(50, color(255/*random(255), random(255), random(255)*/), cubeX, cubeY);
+    nowCubeIndex = -1;
   }
+  
+   if(cubes.size() != 0 && nowCubeIndex != -1){
+     if (deleteButton.isMouseOver()) {
+       cubes.remove(nowCubeIndex); // 從列表中刪除方塊
+       nowCubeIndex = -1;
+     }
+   }
 }
 
 void mouseDragged() {
@@ -79,7 +118,7 @@ void mouseReleased() {
   }
   
    // 解鎖圓形
-  circle.unlock();
+ circle.unlock();
 }
 
 // 創建方塊的函數

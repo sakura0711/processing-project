@@ -1,3 +1,4 @@
+
 class Cube {
   float x;
   float y;
@@ -7,6 +8,7 @@ class Cube {
   boolean locked;
   float xOffset;
   float yOffset;
+  
   
   Cube(float size, color fillColor, float posX, float posY) {
     this.size = size;
