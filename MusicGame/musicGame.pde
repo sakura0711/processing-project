@@ -36,12 +36,16 @@ int score = 0,
     MAXscore = 4000;
 int combo = 0;
 int health = 1500;
+int stepMagnification = 10; // init speed
+
 boolean GameState = false;
 boolean GameInit = true;
 
-boolean ClickmidlleTRACK = false, 
+boolean Clickleft2TRACK  = false,
         ClickleftTRACK   = false, 
-        ClickrightTRACK  = false;
+        ClickmidlleTRACK = false, 
+        ClickrightTRACK  = false,
+        Clickright2TRACK = false;
 int     ClickTrackIndex  = -1; // default = noen
  
 
@@ -66,6 +70,10 @@ void draw(){
     stroke(0,0,255);
     line(0,0,0,0,0,-200); // z
     
+    // fast fast ~!!
+    if(score > 1000 && score < 2000){stepMagnification = 20; }
+    if(score > 2000){stepMagnification = 30; }
+    
     if(health > 0 && GameState && score < MAXscore)
     {
         strokeWeight(10);
@@ -75,19 +83,23 @@ void draw(){
         /* # Start Drawing Support line ================== */
             // left to right
             strokeWeight(3);
+            line(width/2 - 190,440,0, width/2 - 190,440,-1700);
             line(width/2 - 115,440,0, width/2 - 115,440,-1700);
             line(width/2 -  40,440,0, width/2 -  40,440,-1700);
             line(width/2 +  40,440,0, width/2 +  40,440,-1700);
             line(width/2 + 115,440,0, width/2 + 115,440,-1700);
+            line(width/2 + 190,440,0, width/2 + 190,440,-1700);
             
-            line(width/2 - 115,440, -1700, width/2 + 115,440,-1700);
+            line(width/2 - 190,440, -1700, width/2 + 190,440,-1700);
             
             textAlign(CENTER, CENTER);
-            textSize(60);
+            textSize(70);
             fill(0,200,190);
+            text("F",  width/2 - 300, height - 150, -500); 
             text("G",  width/2 - 150, height - 150, -500); 
             text("H",  width/2 +  0, height - 150, -500); 
             text("J",  width/2 + 150, height - 150, -500); 
+            text("K",  width/2 + 300, height - 150, -500);
             
         /* ============================================== */
      
@@ -169,6 +181,11 @@ void createBlock(float posX, float posY, float posZ, int sizeX, int sizeY, int s
 }
 
 void keyPressed(){
+    if(key == 'f' || key == 'F'){
+        Clickleft2TRACK = true;
+        tickSound.play();
+        ClickTrackIndex = 3;
+    }
     if(key == 'g' || key == 'G'){
         ClickleftTRACK = true;
         tickSound.play();
@@ -183,6 +200,11 @@ void keyPressed(){
         ClickrightTRACK = true;
         tickSound.play();
         ClickTrackIndex = 2;
+    }
+    if(key == 'k' || key == 'K'){
+        Clickleft2TRACK = true;
+        tickSound.play();
+        ClickTrackIndex = 4;
     }
     
     // Start Game 
@@ -210,13 +232,22 @@ void keyPressed(){
            box2Delay = false;
            box3Delay = false;
            box4Delay = false;
+           //box5Delay = false;
            box6Delay = false;
            
+           Clickleft2TRACK = false;
            ClickleftTRACK = false;
            ClickmidlleTRACK = false;
            ClickrightTRACK = false;
+           Clickright2TRACK = false;
            
            DelayCount = 0;
+           stepMagnification = 10;
        }
+    }
+    
+    // invincible Star
+    if(key == 'a' || key == 'A'){
+        health = 9000;
     }
 }
