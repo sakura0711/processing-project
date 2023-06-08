@@ -5,10 +5,6 @@ class Block{
     int   _stepCount = _stepMin;
     int   _trackSelector = 1; // left = 0 middle = 1 right = 2 (default : 1)
     
-    //boolean ClickmidlleTRACK = false, 
-    //        ClickleftTRACK   = false, 
-    //        ClickrightTRACK  = false;
-    
     Block(float posX, float posY, float posZ, int sizeX, int sizeY, int sizeZ){
         this._posX = posX; this._posY = posY; this._posZ = posZ;
         this._sizeX = sizeX; this._sizeY = sizeY; this._sizeZ = sizeZ;
