@@ -1,31 +1,41 @@
+// PeasyCam (PeasyCam library)
 import peasy .*;
 PeasyCam cam;
+
+// play SoundFile (sound library)
+import processing.sound.*;
+SoundFile tickSound, BGM;
+
 PImage backgroundImage;
-Block block,block2, block3;
 
 ArrayList<Block> blocks = new ArrayList<Block>();
 
 void setup(){
     size(900,1000,P3D);
     smooth(4);
-    
+
     // # PeasyCam Setting
     cam = new PeasyCam(this, width/2, 200, 0, 300);
     //cam.setPitchRotationMode();
     cam.setActive(false); //false to make this camera stop responding to mouse
     cam.rotateX(-100);
     
-    for(int i = 0; i < 5 ; i++){
+    // # createBlock List
+    for(int i = 0; i < 6 ; i++){
         createBlock(width/2 +  0,height/2 -100,-1500,70,50,30);
     } 
     
+    // # import assets
     backgroundImage = loadImage("background.png");
+    tickSound = new SoundFile(this, "tickSound2.mp3");
+    BGM = new SoundFile(this, "BGM.mp3");
+    BGM.play();
 }
 
 int score = 0,
-    MAXscore = 1000;
+    MAXscore = 4000;
 int combo = 0;
-int health = 1000;
+int health = 1500;
 boolean GameState = false;
 boolean GameInit = true;
 
@@ -41,8 +51,10 @@ color judgeColor = color(255,255,255);
 boolean box2Delay = false,
         box3Delay = false,
         box4Delay = false,
-        box5Delay = false;
-
+        box5Delay = false,
+        box6Delay = false;
+int     DelayCount = 0;
+ 
 void draw(){
     background(backgroundImage);
 
@@ -110,15 +122,18 @@ void draw(){
 
         blocks.get(0).Update(ClickTrackIndex);
         
-        if(blocks.get(0)._stepCount == -1200) { box2Delay = true; }
-        if(blocks.get(0)._stepCount == -1000) { box3Delay = true; }
-        if(blocks.get(0)._stepCount ==  -800) { box4Delay = true; }
-        if(blocks.get(0)._stepCount ==  -500) { box5Delay = true; }
+        DelayCount++;
+        if(DelayCount ==   30) { box2Delay = true; }
+        if(DelayCount ==   50) { box3Delay = true; }
+        if(DelayCount ==   70) { box4Delay = true; }
+        if(DelayCount ==  100) { box5Delay = true; }
+        if(DelayCount ==  120) { box6Delay = true; }
         
         if(box2Delay) {blocks.get(1).Update(ClickTrackIndex);}
         if(box3Delay) {blocks.get(2).Update(ClickTrackIndex);}
         if(box4Delay) {blocks.get(3).Update(ClickTrackIndex);}
         if(box5Delay) {blocks.get(4).Update(ClickTrackIndex);} 
+        if(box6Delay) {blocks.get(5).Update(ClickTrackIndex);}
     }
     else if(score > MAXscore){
         GameState = false;
@@ -156,14 +171,17 @@ void createBlock(float posX, float posY, float posZ, int sizeX, int sizeY, int s
 void keyPressed(){
     if(key == 'g' || key == 'G'){
         ClickleftTRACK = true;
+        tickSound.play();
         ClickTrackIndex = 0;
     }
     if(key == 'h' || key == 'H'){
         ClickmidlleTRACK = true;
+        tickSound.play();
         ClickTrackIndex = 1;
     }
     if(key == 'j' || key == 'J'){
         ClickrightTRACK = true;
+        tickSound.play();
         ClickTrackIndex = 2;
     }
     
@@ -172,6 +190,7 @@ void keyPressed(){
         if(GameInit){
             GameState = true;
             GameInit = false;
+            DelayCount = 0;
         }
     }
     
@@ -181,7 +200,7 @@ void keyPressed(){
        {    
            score = 0;
            combo = 0;
-           health = 1000;
+           health = 1500;
            GameState = true;
            
            for (Block block : blocks) {
@@ -191,6 +210,13 @@ void keyPressed(){
            box2Delay = false;
            box3Delay = false;
            box4Delay = false;
+           box6Delay = false;
+           
+           ClickleftTRACK = false;
+           ClickmidlleTRACK = false;
+           ClickrightTRACK = false;
+           
+           DelayCount = 0;
        }
     }
 }
