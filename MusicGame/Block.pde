@@ -5,6 +5,7 @@ class Block{
     int   _stepCount = _stepMin;
     //int   _stepMagnification = 10;
     int   _trackSelector = 1; // left = 0 middle = 1 right = 2 (default : 1)
+    boolean   _boxDelay = false;
     
     Block(float posX, float posY, float posZ, int sizeX, int sizeY, int sizeZ){
         this._posX = posX; this._posY = posY; this._posZ = posZ;
@@ -45,7 +46,7 @@ class Block{
                 if(_trackSelector == 2){ClickrightTRACK = false;}
                 if(_trackSelector == 4){ClickleftTRACK = false;}
                 _stepCount = _stepMin; 
-                _trackSelector = int(random(5)); // 0 ~ 4
+                _trackSelector = int(random(difficulty)); // 0 ~ 4
     
                 judgeColor = color(186, 186, 186);
                 judgeString = "miss";
@@ -121,7 +122,7 @@ class Block{
             if(_trackSelector == 4){ClickleftTRACK = false;}
             
             _stepCount = _stepMin; 
-            _trackSelector = int(random(5)); // 0 ~ 4
+            _trackSelector = int(random(difficulty)); // 0 ~ 4
             ClickTrackIndex = -1;
 
             

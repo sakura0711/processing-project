@@ -20,9 +20,10 @@ void setup(){
     cam.setActive(false); //false to make this camera stop responding to mouse
     cam.rotateX(-100);
     
+    
     // # createBlock List
     for(int i = 0; i < 6 ; i++){
-        createBlock(width/2 +  0,height/2 -100,-1500,70,50,30);
+        createBlock(width/2 +  0,height/2 -100,-1500,70,100,30);
     } 
     
     // # import assets
@@ -37,9 +38,13 @@ int score = 0,
 int combo = 0;
 int health = 1500;
 int stepMagnification = 10; // init speed
+int difficulty = 3;
 
 boolean GameState = false;
 boolean GameInit = true;
+boolean isRotateR = true,
+        isRotateM = true,
+        isRotateL = true;
 
 boolean Clickleft2TRACK  = false,
         ClickleftTRACK   = false, 
@@ -52,11 +57,12 @@ int     ClickTrackIndex  = -1; // default = noen
 String judgeString = ""; 
 color judgeColor = color(255,255,255);
 
-boolean box2Delay = false,
-        box3Delay = false,
-        box4Delay = false,
-        box5Delay = false,
-        box6Delay = false;
+//boolean box2Delay = false,
+//        box3Delay = false,
+//        box4Delay = false,
+//        box5Delay = false,
+//        box6Delay = false;
+
 int     DelayCount = 0;
  
 void draw(){
@@ -74,6 +80,23 @@ void draw(){
     if(score > 1000 && score < 2000){stepMagnification = 20; }
     if(score > 2000){stepMagnification = 30; }
     
+
+    int countRotate = 0;
+    for (int i = 0;i < MAXscore; i++){
+        
+    }
+    
+    if((score < 200 && score > 100) && isRotateR){cam.rotateZ(-100); isRotateR = false;}
+    if((score < 300 && score > 200) && isRotateM){cam.rotateZ(+100); isRotateM = false;}
+    if((score < 400 && score > 500) && isRotateL){cam.rotateZ(+100); isRotateL = false;}
+    
+    //if(score > 400 && !isRotateR){isRotateR = true;}
+    //if(score > 500 && !isRotateM){isRotateM = true;}
+    //if(score > 600 && !isRotateL){isRotateL = true;}
+    
+    //else if(score > 400){cam.rotateZ(0);}
+    //if(score % 301 == 0){cam.rotateZ(+100);}
+   
     if(health > 0 && GameState && score < MAXscore)
     {
         strokeWeight(10);
@@ -135,17 +158,23 @@ void draw(){
         blocks.get(0).Update(ClickTrackIndex);
         
         DelayCount++;
-        if(DelayCount ==   30) { box2Delay = true; }
-        if(DelayCount ==   50) { box3Delay = true; }
-        if(DelayCount ==   70) { box4Delay = true; }
-        if(DelayCount ==  100) { box5Delay = true; }
-        if(DelayCount ==  120) { box6Delay = true; }
+        //for(Block block:blocks){
+        //    if()
+        //}
+        if(DelayCount ==   30) { blocks.get(1)._boxDelay = true; }
+        if(DelayCount ==   50) { blocks.get(2)._boxDelay = true; }
+        if(DelayCount ==   70) { blocks.get(3)._boxDelay = true; }
+        if(DelayCount ==  100) { blocks.get(4)._boxDelay = true; }
+        if(DelayCount ==  120) { blocks.get(5)._boxDelay = true; }
         
-        if(box2Delay) {blocks.get(1).Update(ClickTrackIndex);}
-        if(box3Delay) {blocks.get(2).Update(ClickTrackIndex);}
-        if(box4Delay) {blocks.get(3).Update(ClickTrackIndex);}
-        if(box5Delay) {blocks.get(4).Update(ClickTrackIndex);} 
-        if(box6Delay) {blocks.get(5).Update(ClickTrackIndex);}
+        for(Block block:blocks){
+            if(block._boxDelay){block.Update(ClickTrackIndex);}
+        }
+        //if(box2Delay) {blocks.get(1).Update(ClickTrackIndex);}
+        //if(box3Delay) {blocks.get(2).Update(ClickTrackIndex);}
+        //if(box4Delay) {blocks.get(3).Update(ClickTrackIndex);}
+        //if(box5Delay) {blocks.get(4).Update(ClickTrackIndex);} 
+        //if(box6Delay) {blocks.get(5).Update(ClickTrackIndex);}
     }
     else if(score > MAXscore){
         GameState = false;
@@ -154,6 +183,7 @@ void draw(){
         fill(0,255,20);
         text("Your a Good!",  width/2, height/2 - 200, -800); 
         text("press \"R\" to Reset",  width/2, height/2, -700); 
+        text("score: " + score,  width/2, height/2 + 200, -800);
     }
     else if(GameInit) {
         textAlign(CENTER, CENTER);
@@ -161,6 +191,7 @@ void draw(){
         fill(0,255,20);
         text("Start Game",  width/2, height/2 - 200, -800); 
         text("press \"S\" to Start",  width/2, height/2, -700); 
+        text("score: " + score,  width/2, height/2 + 200, -800);
     }
     else
     {
@@ -170,6 +201,7 @@ void draw(){
         fill(255,0,0);
         text("Your a fucking failure!",  width/2, height/2 - 200, -800); 
         text("press \"R\" to Reset your garbage life",  width/2, height/2, -700); 
+        text("score: " + score,  width/2, height/2 + 200, -800);
     }
     
 }
@@ -227,13 +259,8 @@ void keyPressed(){
            
            for (Block block : blocks) {
                 block._stepCount = block._stepMin;
+                block._boxDelay = false;
            }
-           
-           box2Delay = false;
-           box3Delay = false;
-           box4Delay = false;
-           //box5Delay = false;
-           box6Delay = false;
            
            Clickleft2TRACK = false;
            ClickleftTRACK = false;
@@ -246,8 +273,12 @@ void keyPressed(){
        }
     }
     
+    if(key == '1'){ difficulty = 3;}
+    if(key == '2'){ difficulty = 5;}
+    
     // invincible Star
-    if(key == 'a' || key == 'A'){
-        health = 9000;
-    }
+    if(key == 'a' || key == 'A'){ health = 9000;}
+    
+    // end game
+    if(key == 'x' || key == 'X'){ health =  200;}
 }
